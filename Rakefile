@@ -1,11 +1,17 @@
 require "active_record"
 
+# This task is invoked to set up the DB environment/connection,
+# as a dependency for tasks that need to interact with the DB
 task :environment do
+  # Setup code shared between the app and rake tasks to initialise the DB and migrator
   require_relative "db/init"
 end
 
+# Load all the tasks provided by the ActiveRecord gem
 load "active_record/railties/databases.rake"
 
+# The ActiveRecord gem doesn't provide a task to generate/create new migration files.
+# Therefore, this is a hand-rolled task that generates migrations similarly to vanilla Rails.
 namespace :g do
   desc "Generate migration"
   task :migration do
