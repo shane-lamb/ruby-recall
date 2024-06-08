@@ -1,27 +1,31 @@
-# Define the flashcards as an array of hashes
-flashcards = [
-  { question: "What is the capital of France?", answer: "Paris" },
-  { question: "Who wrote Romeo and Juliet?", answer: "William Shakespeare" },
-  { question: "What is the largest planet in our solar system?", answer: "Jupiter" }
-]
+# frozen_string_literal: true
+
+require "active_record"
+require_relative "models/flashcard"
+
+require_relative "../db/init"
+
+flashcards = Flashcard.all.load
 
 # Initialize the current flashcard index
 current_card_index = 0
 
 # Main loop
 while true do
+  flashcard = flashcards[current_card_index]
+
   # Display the current flashcard
-  puts "\n#{flashcards[current_card_index][:question]}"
+  puts "\n#{flashcard.front}"
 
   # Get user input (answer)
   print "Enter your answer: "
   user_answer = gets.chomp.downcase
 
   # Check if the user's answer is correct
-  if user_answer == flashcards[current_card_index][:answer].downcase
+  if user_answer == flashcard.back.downcase
     puts "\n Correct! 🎉"
   else
-    puts "\n Incorrect. The correct answer is #{flashcards[current_card_index][:answer]}."
+    puts "\n Incorrect. The correct answer is #{flashcard.back}."
   end
 
   # Ask if the user wants to continue
