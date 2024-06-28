@@ -12,8 +12,10 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_05_19_135948) do
   create_table "flashcards", force: :cascade do |t|
-    t.string "front"
-    t.string "back"
+    t.string "front", null: false
+    t.string "back", null: false
+    t.integer "correct_guess_streak", default: 0, null: false
+    t.datetime "review_due_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

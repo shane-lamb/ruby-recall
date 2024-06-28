@@ -5,14 +5,8 @@ require_relative "models/flashcard"
 
 require_relative "../db/init"
 
-flashcards = Flashcard.all.load
-
-# Initialize the current flashcard index
-current_card_index = 0
-
-# Main loop
-while true do
-  flashcard = flashcards[current_card_index]
+while Flashcard.next_due
+  flashcard = Flashcard.next_due
 
   # Display the current flashcard
   puts "\n#{flashcard.front}"
@@ -24,8 +18,10 @@ while true do
   # Check if the user's answer is correct
   if user_answer == flashcard.back.downcase
     puts "\n Correct! 🎉"
+    flashcard.schedule_after_correct_guess
   else
     puts "\n Incorrect. The correct answer is #{flashcard.back}."
+    flashcard.schedule_after_incorrect_guess
   end
 
   # Ask if the user wants to continue
@@ -33,12 +29,6 @@ while true do
   response = gets.chomp.downcase
   if response == 'n'
     break
-  end
-
-  # Move on to the next flashcard
-  current_card_index += 1
-  if current_card_index >= flashcards.size
-    current_card_index = 0
   end
 end
 
