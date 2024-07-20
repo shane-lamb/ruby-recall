@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class Flashcard < ActiveRecord::Base
+  def self.all_due
+    where("review_due_at <= ?", Time.now)
+  end
+
   def self.next_due
-    where("review_due_at <= ?", Time.now).order(:review_due_at).first
+    all_due.order(:review_due_at).first
   end
 
   def schedule_after_correct_guess
